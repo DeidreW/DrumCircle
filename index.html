@@ -2,10 +2,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 
 <audio id="drum1" preload>
-	<source src="Djembe.wav"></audio>
+	<source src="https://dl.dropboxusercontent.com/u/13736220/Djembe.wav"></audio>
 
 <audio id="drum2" preload>
-	<source src="Conga.wav">
+	<source src="https://dl.dropboxusercontent.com/u/13736220/DrumCircle/Conga.wav">
 </audio>
 
 <script type="text/javascript">
@@ -21,7 +21,7 @@
 </script>
 
 <script>
-  var socket = io.connect('http://localhost:8080');
+  var socket = io.connect();
 
   // on connection to server, ask for user's name with an anonymous callback
   socket.on('connect', function(){
@@ -57,6 +57,8 @@ socket.emit('adduser', "dummyname");
       // tell server to execute 'send_djembe' and send along one parameter
       socket.emit('send_djembe', message);
     });
+
+	
 
   });
 
