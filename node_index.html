@@ -1,0 +1,87 @@
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
+<audio id="drum1" preload>
+	<source src="https://dl.dropboxusercontent.com/u/13736220/Djembe.wav"></audio>
+
+<audio id="drum2" preload>
+	<source src="https://dl.dropboxusercontent.com/u/13736220/DrumCircle/Conga.wav">
+</audio>
+
+<script type="text/javascript">
+	function play_djembe_sound() {
+		document.getElementById('drum1').play();
+	}
+</script>
+
+<script type="text/javascript">
+	function play_conga_sound() {
+		document.getElementById('drum2').play();
+	}
+</script>
+
+<script>
+  var socket = io.connect();
+
+  // on connection to server, ask for user's name with an anonymous callback
+  socket.on('connect', function(){
+    // call the server-side function 'adduser' and send one parameter (value of prompt)
+socket.emit('adduser', "dummyname");
+  });
+
+  // listener, whenever the server emits 'update_djembe', this updates the chat body
+  socket.on('update_djembe', function (username, data) {
+    play_djembe_sound(); 
+});
+
+// listener, whenever the server emits 'update_conga'
+	socket.on('update_conga', function (username, data) {
+	play_conga_sound();
+	});
+
+
+  // listener, whenever the server emits 'updateusers', this updates the username list
+  socket.on('updateusers', function(data) {
+    $('#users').empty();
+    $.each(data, function(key, value) {
+      $('#users').append('<div>' + key + '</div>');
+    });
+  });
+
+  // on load of page
+  $(function(){
+    // when the client clicks DJEMBE
+    $('#djembe_send').click( function() {
+      var message = $('#data').val();
+      $('#data').val('');
+      // tell server to execute 'send_djembe' and send along one parameter
+      socket.emit('send_djembe', message);
+    });
+
+	
+
+  });
+
+  $(function() {
+	// when the client clicks CONGA
+	$('#conga_send').click( function() {
+		var message = $('#data').val();
+		$('#data').val('');
+		// tell server to execute 'send_conga'
+		socket.emit('send_conga', message);
+		// play_conga_sound();
+	  });
+	});
+
+</script>
+<div style="float:left;width:300px;height:250px;overflow:scroll-y;padding:10px;">
+  <div id="conversation"></div>
+
+
+  	<input type="image" src="https://dl.dropboxusercontent.com/u/13736220/DrumCircle/djembe.png" id="djembe_send" />
+
+	<input type="image" src="https://dl.dropboxusercontent.com/u/13736220/DrumCircle/bongo.png" id="conga_send" />
+
+
+
+</div>
